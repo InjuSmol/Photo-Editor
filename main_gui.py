@@ -42,20 +42,20 @@ class StartPage(QWidget):
         self.name_input = QLineEdit()
         self.name_input.setPlaceholderText("Your name")
 
-        self.restaurant_input = QLineEdit()
-        self.restaurant_input.setPlaceholderText("Restaurant name")
+        self.session_input = QLineEdit()
+        self.session_input.setPlaceholderText("Session name")
 
         start_btn = QPushButton("START")
         start_btn.clicked.connect(
             lambda: switch_callback(
                 self.name_input.text(),
-                self.restaurant_input.text()
+                self.session_input.text()
             )
         )
 
         layout.addWidget(QLabel("VISTA Photo System"))
         layout.addWidget(self.name_input)
-        layout.addWidget(self.restaurant_input)
+        layout.addWidget(self.session_input)
         layout.addWidget(start_btn)
 
         self.setLayout(layout)
@@ -419,16 +419,16 @@ class App(QWidget):
     def show_dashboard(self):
         self.stack.setCurrentWidget(self.dashboard)
 
-    def start_session(self, name, restaurant):
-        if not name or not restaurant:
-            print("Name and restaurant required")
+    def start_session(self, name, session):
+        if not name or not session:
+            print("Name and session name required")
             return
 
         print("SESSION STARTED:")
-        print(name, restaurant)
+        print(name, session)
 
         # 1. Create session folder: e.g., base/session/YYYY-MM-DD_Name_Restaurant
-        session_name = f"{datetime.now():%m.%d.%Y} {name} {restaurant}"
+        session_name = f"{datetime.now():%m.%d.%Y} {name} {session}"
         session_folder = Path(config.SESSION_BASE_DIR) / session_name
         session_folder.mkdir(parents=True, exist_ok=True)
 
@@ -436,7 +436,7 @@ class App(QWidget):
         config.CURRENT_SESSION_DIR = session_folder  # <-- dynamic session folder
 
         # 2. Ensure other directories exist
-        ensure_dirs(name, restaurant)
+        ensure_dirs(name, session)
 
         # After creating the session folder
         self.dashboard.file_actions.set_session_dir(session_folder)
